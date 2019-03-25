@@ -1,0 +1,3 @@
+spring:
+  application:
+    name: sample-spring-elasticsearch
