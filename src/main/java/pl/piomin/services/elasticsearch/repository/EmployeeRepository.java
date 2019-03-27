@@ -8,4 +8,5 @@ import java.util.List;
 public interface EmployeeRepository extends CrudRepository<Employee, Long> {
 
     List<Employee> findByOrganizationName(String name);
+    List<Employee> findByName(String name);
 }

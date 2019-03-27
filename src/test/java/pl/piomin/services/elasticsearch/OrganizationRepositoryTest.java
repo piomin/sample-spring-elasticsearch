@@ -52,4 +52,10 @@ public class OrganizationRepositoryTest {
         Assert.assertTrue(employees.size() > 0);
     }
 
+    @Test
+    public void testFindByName() {
+        List<Employee> employees = repository.findByName("John Smith10000");
+        employees.forEach(it -> LOGGER.info(it.toString()));
+    }
+
 }
