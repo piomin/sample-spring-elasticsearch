@@ -1,13 +1,14 @@
 package pl.piomin.services.elasticsearch;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.testcontainers.elasticsearch.ElasticsearchContainer;
 import pl.piomin.services.elasticsearch.model.Department;
 import pl.piomin.services.elasticsearch.model.Employee;
 import pl.piomin.services.elasticsearch.model.Organization;
@@ -22,8 +23,15 @@ public class OrganizationRepositoryTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrganizationRepositoryTest.class);
 
+    @ClassRule
+    public static ElasticsearchContainer container = new ElasticsearchContainer();
     @Autowired
     EmployeeRepository repository;
+
+    @BeforeClass
+    public static void before() {
+        System.setProperty("spring.data.elasticsearch.cluster-nodes", "192.168.99.100:" + container.getMappedPort(9300));
+    }
 
     @Test
     public void testAdd() {
