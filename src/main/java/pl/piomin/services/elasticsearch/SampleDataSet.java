@@ -71,9 +71,9 @@ public class SampleDataSet {
             employee.setName("John Smith" + r.nextInt(1000000));
             employee.setAge(r.nextInt(100));
             employee.setPosition("Developer");
-            int departmentId = r.nextInt(100);
+            int departmentId = r.nextInt(5000);
             employee.setDepartment(new Department((long) departmentId, "TestD" + departmentId));
-            int organizationId = departmentId % 10;
+            int organizationId = departmentId % 100;
             employee.setOrganization(new Organization((long) organizationId, "TestO" + organizationId, "Test Street No. " + organizationId));
             employees.add(employee);
         }
