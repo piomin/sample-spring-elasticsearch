@@ -11,8 +11,8 @@ import pl.piomin.services.elasticsearch.model.Department;
 import pl.piomin.services.elasticsearch.model.Employee;
 import pl.piomin.services.elasticsearch.model.Organization;
 import pl.piomin.services.elasticsearch.repository.EmployeeRepository;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -38,26 +38,26 @@ public class EmployeeRepositoryTest {
         employee.setPosition("Developer");
         employee.setDepartment(new Department(1L, "TestD"));
         employee.setOrganization(new Organization(1L, "TestO", "Test Street No. 1"));
-        employee = repository.save(employee);
-        Assert.assertNotNull(employee);
+        Mono<Employee> employeeSaved = repository.save(employee);
+        Assert.assertNotNull(employeeSaved.block());
     }
 
     @Test
     public void testFindAll() {
-        Iterable<Employee> employees = repository.findAll();
-        Assert.assertTrue(employees.iterator().hasNext());
+        Flux<Employee> employees = repository.findAll();
+        Assert.assertTrue(employees.count().block() > 0);
     }
 
     @Test
     public void testFindByOrganization() {
-        List<Employee> employees = repository.findByOrganizationName("TestO");
-        Assert.assertTrue(employees.size() > 0);
+        Flux<Employee> employees = repository.findByOrganizationName("TestO");
+        Assert.assertTrue(employees.count().block() > 0);
     }
 
     @Test
     public void testFindByName() {
-        List<Employee> employees = repository.findByName("John Smith");
-        Assert.assertTrue(employees.size() > 0);
+        Flux<Employee> employees = repository.findByName("John Smith");
+        Assert.assertTrue(employees.count().block() > 0);
     }
 
 }

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/employees")
@@ -21,17 +23,17 @@ public class EmployeeController {
 	EmployeeRepository repository;
 
 	@PostMapping
-	public Employee add(@RequestBody Employee employee) {
+	public Mono<Employee> add(@RequestBody Employee employee) {
 		return repository.save(employee);
 	}
 
 	@GetMapping("/{name}")
-	public List<Employee> findByName(@PathVariable("name") String name) {
+	public Flux<Employee> findByName(@PathVariable("name") String name) {
 		return repository.findByName(name);
 	}
 
 	@GetMapping("/organization/{organizationName}")
-	public List<Employee> findByOrganizationName(@PathVariable("organizationName") String organizationName) {
+	public Flux<Employee> findByOrganizationName(@PathVariable("organizationName") String organizationName) {
 		return repository.findByOrganizationName(organizationName);
 	}
 
