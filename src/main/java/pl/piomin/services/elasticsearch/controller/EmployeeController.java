@@ -32,6 +32,11 @@ public class EmployeeController {
 		return repository.findByName(name);
 	}
 
+	@GetMapping
+	public Flux<Employee> findAll() {
+		return repository.findAll();
+	}
+
 	@GetMapping("/organization/{organizationName}")
 	public Flux<Employee> findByOrganizationName(@PathVariable("organizationName") String organizationName) {
 		return repository.findByOrganizationName(organizationName);

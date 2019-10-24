@@ -27,6 +27,7 @@ public class SampleDataSet {
     @Autowired
     ElasticsearchTemplate template;
 
+
     @PostConstruct
     public void init() {
         for (int i = 0; i < 10000; i++) {
@@ -62,7 +63,7 @@ public class SampleDataSet {
 
     private List<Employee> employees() {
         List<Employee> employees = new ArrayList<>();
-        int id = (int) repository.count();
+        int id = repository.count().block().intValue();
         LOGGER.info("Starting from id: {}", id);
         for (int i = id; i < 10000 + id; i++) {
             Random r = new Random();

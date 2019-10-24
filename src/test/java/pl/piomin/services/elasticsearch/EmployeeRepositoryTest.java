@@ -27,6 +27,7 @@ public class EmployeeRepositoryTest {
     @BeforeClass
     public static void before() {
         System.setProperty("spring.data.elasticsearch.cluster-nodes", container.getContainerIpAddress() + ":" + container.getMappedPort(9300));
+        System.setProperty("spring.data.elasticsearch.client.reactive.endpoints", container.getContainerIpAddress() + ":" + container.getMappedPort(9200));
     }
 
     @Test
