@@ -3,16 +3,12 @@ spring:
     name: sample-spring-elasticsearch
   data:
     elasticsearch:
-      cluster-name: docker-cluster
-      cluster-nodes: 192.168.99.100:9300
       client:
         reactive:
           endpoints: 192.168.99.100:9200
-
   elasticsearch:
     rest:
       uris: http://192.168.99.100:9200
-
 
 initial-import:
   enabled: false

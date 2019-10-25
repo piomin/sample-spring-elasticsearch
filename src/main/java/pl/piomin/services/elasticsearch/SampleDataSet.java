@@ -4,12 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.elasticsearch.client.reactive.ReactiveElasticsearchClient;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.ReactiveElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import pl.piomin.services.elasticsearch.model.Department;
 import pl.piomin.services.elasticsearch.model.Employee;
 import pl.piomin.services.elasticsearch.model.Organization;
 import pl.piomin.services.elasticsearch.repository.EmployeeRepository;
+import reactor.core.publisher.Mono;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -25,7 +28,9 @@ public class SampleDataSet {
     @Autowired
     EmployeeRepository repository;
     @Autowired
-    ElasticsearchTemplate template;
+    ReactiveElasticsearchTemplate template;
+    @Autowired
+    ReactiveElasticsearchClient client;
 
 
     @PostConstruct
@@ -37,24 +42,32 @@ public class SampleDataSet {
 
     public void bulk(int ii) {
         try {
-            if (!template.indexExists(INDEX_NAME)) {
-                template.createIndex(INDEX_NAME);
-            }
+//            if (!template.indexExists(INDEX_NAME)) {
+//                template.createIndex(INDEX_NAME);
+//            }
+            Mono<Boolean> exists = client.indices().existsIndex(request -> request.indices(INDEX_NAME));
+            exists.subscribe(ex -> {
+                if (!ex) {
+                    client.indices().createIndex(request -> request.index(INDEX_NAME));
+                }
+            });
             ObjectMapper mapper = new ObjectMapper();
             List<IndexQuery> queries = new ArrayList<>();
             List<Employee> employees = employees();
-            for (Employee employee : employees) {
-                IndexQuery indexQuery = new IndexQuery();
-                indexQuery.setId(employee.getId().toString());
-                indexQuery.setSource(mapper.writeValueAsString(employee));
-                indexQuery.setIndexName(INDEX_NAME);
-                indexQuery.setType(INDEX_TYPE);
-                queries.add(indexQuery);
-            }
-            if (queries.size() > 0) {
-                template.bulkIndex(queries);
-            }
-            template.refresh(INDEX_NAME);
+//            for (Employee employee : employees) {
+//                IndexQuery indexQuery = new IndexQuery();
+//                indexQuery.setId(employee.getId().toString());
+//                indexQuery.setSource(mapper.writeValueAsString(employee));
+//                indexQuery.setIndexName(INDEX_NAME);
+//                indexQuery.setType(INDEX_TYPE);
+//                queries.add(indexQuery);
+//            }
+//            if (queries.size() > 0) {
+//                template.bulkIndex(queries);
+//            }
+            repository.saveAll(employees);
+            client.indices().refreshIndex(refreshRequest -> refreshRequest.indices(INDEX_NAME)).block();
+//            template.refresh(INDEX_NAME);
             LOGGER.info("BulkIndex completed: {}", ii);
         } catch (Exception e) {
             LOGGER.error("Error bulk index", e);
