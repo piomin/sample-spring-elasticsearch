@@ -37,6 +37,11 @@ public class EmployeeController {
 		return repository.findAll();
 	}
 
+	@GetMapping("/count/all")
+	public Mono<Long> count() {
+		return repository.count();
+	}
+
 	@GetMapping("/organization/{organizationName}")
 	public Flux<Employee> findByOrganizationName(@PathVariable("organizationName") String organizationName) {
 		return repository.findByOrganizationName(organizationName);

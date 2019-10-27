@@ -32,7 +32,7 @@ public class EmployeeRepositoryTest {
     @Test
     public void testAdd() {
         Employee employee = new Employee();
-        employee.setId(1L);
+        employee.setId("1");
         employee.setName("John Smith");
         employee.setAge(33);
         employee.setPosition("Developer");

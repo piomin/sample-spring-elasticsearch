@@ -35,19 +35,17 @@ public class SampleDataSet {
 
     @PostConstruct
     public void init() {
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 1; i++) {
             bulk(i);
         }
     }
 
     public void bulk(int ii) {
         try {
-//            if (!template.indexExists(INDEX_NAME)) {
-//                template.createIndex(INDEX_NAME);
-//            }
             Mono<Boolean> exists = client.indices().existsIndex(request -> request.indices(INDEX_NAME));
             exists.subscribe(ex -> {
                 if (!ex) {
+                    LOGGER.info("Creating index: {}", INDEX_NAME);
                     client.indices().createIndex(request -> request.index(INDEX_NAME));
                 }
             });
@@ -65,8 +63,8 @@ public class SampleDataSet {
 //            if (queries.size() > 0) {
 //                template.bulkIndex(queries);
 //            }
-            repository.saveAll(employees);
-            client.indices().refreshIndex(refreshRequest -> refreshRequest.indices(INDEX_NAME)).block();
+            repository.saveAll(employees).doOnNext(employee -> LOGGER.info("Ret: {}", employee));
+//            client.indices().refreshIndex(refreshRequest -> refreshRequest.indices(INDEX_NAME)).block();
 //            template.refresh(INDEX_NAME);
             LOGGER.info("BulkIndex completed: {}", ii);
         } catch (Exception e) {
@@ -81,7 +79,7 @@ public class SampleDataSet {
         for (int i = id; i < 10000 + id; i++) {
             Random r = new Random();
             Employee employee = new Employee();
-            employee.setId((long) i);
+            employee.setId("" + i);
             employee.setName("John Smith" + r.nextInt(1000000));
             employee.setAge(r.nextInt(100));
             employee.setPosition("Developer");
