@@ -63,7 +63,7 @@ public class SampleDataSet {
 //            if (queries.size() > 0) {
 //                template.bulkIndex(queries);
 //            }
-            repository.saveAll(employees).doOnNext(employee -> LOGGER.info("Ret: {}", employee));
+            repository.saveAll(employees).subscribe(empl -> LOGGER.info("ADD: {}", empl));
 //            client.indices().refreshIndex(refreshRequest -> refreshRequest.indices(INDEX_NAME)).block();
 //            template.refresh(INDEX_NAME);
             LOGGER.info("BulkIndex completed: {}", ii);
@@ -79,8 +79,7 @@ public class SampleDataSet {
         for (int i = id; i < 10000 + id; i++) {
             Random r = new Random();
             Employee employee = new Employee();
-            employee.setId("" + i);
-            employee.setName("John Smith" + r.nextInt(1000000));
+            employee.setName("JohnSmith" + r.nextInt(1000000));
             employee.setAge(r.nextInt(100));
             employee.setPosition("Developer");
             int departmentId = r.nextInt(5000);
