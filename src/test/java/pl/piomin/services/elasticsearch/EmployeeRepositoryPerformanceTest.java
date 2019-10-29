@@ -33,15 +33,15 @@ public class EmployeeRepositoryPerformanceTest extends AbstractBenchmark {
         employee.setName("John Smith");
         employee.setAge(r.nextInt(100));
         employee.setPosition("Developer");
-        employee.setDepartment(new Department((long) r.nextInt(10), "TestD"));
-        employee.setOrganization(new Organization((long) r.nextInt(10), "TestO", "Test Street No. 1"));
+        employee.setDepartment(new Department((long) r.nextInt(1000), "TestD"));
+        employee.setOrganization(new Organization((long) r.nextInt(100), "TestO", "Test Street No. 1"));
         employee = template.postForObject("http://localhost:8080/employees", employee, Employee.class);
         Assert.assertNotNull(employee);
         Assert.assertNotNull(employee.getId());
     }
 
     @Test
-    @BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 2)
+    @BenchmarkOptions(concurrency = 10, benchmarkRounds = 1000, warmupRounds = 2)
     public void findByNameTest() {
         String name = "JohnSmith" + r.nextInt(1000000);
         Employee[] employees = template.getForObject("http://localhost:8080/employees/{name}", Employee[].class, name);
@@ -50,7 +50,7 @@ public class EmployeeRepositoryPerformanceTest extends AbstractBenchmark {
     }
 
     @Test
-    @BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 2)
+    @BenchmarkOptions(concurrency = 10, benchmarkRounds = 100, warmupRounds = 2)
     public void findByOrganizationNameTest() {
         String organizationName = "TestO" + r.nextInt(5000);
         Employee[] employees = template.getForObject("http://localhost:8080/employees/organization/{organizationName}", Employee[].class, organizationName);
