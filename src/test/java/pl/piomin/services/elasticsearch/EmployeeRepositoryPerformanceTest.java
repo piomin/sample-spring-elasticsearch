@@ -33,7 +33,7 @@ public class EmployeeRepositoryPerformanceTest {
             .build();
 
     @Test
-    @BenchmarkOptions(benchmarkRounds = 100, warmupRounds = 2)
+    @BenchmarkOptions(concurrency = 5, benchmarkRounds = 100, warmupRounds = 2)
     public void addTest() throws TimeoutException, InterruptedException {
         final Waiter waiter = new Waiter();
         Employee employee = new Employee();
@@ -52,29 +52,29 @@ public class EmployeeRepositoryPerformanceTest {
     }
 
     @Test
-    @BenchmarkOptions(concurrency = 10, benchmarkRounds = 1000, warmupRounds = 2)
+    @BenchmarkOptions(concurrency = 5, benchmarkRounds = 100, warmupRounds = 2)
     public void findByNameTest() throws TimeoutException, InterruptedException {
         final Waiter waiter = new Waiter();
         String name = "JohnSmith" + r.nextInt(1000000);
         Flux<Employee> employees = client.get().uri("/employees/{name}", name).retrieve().bodyToFlux(Employee.class);
         employees.count().subscribe(count -> {
-            LOGGER.info("Found: {}", count);
             waiter.assertTrue(count > 0);
             waiter.resume();
+            LOGGER.info("Found({}): {}", name, count);
         });
         waiter.await(5000);
     }
 
     @Test
-    @BenchmarkOptions(concurrency = 10, benchmarkRounds = 100, warmupRounds = 2)
+    @BenchmarkOptions(concurrency = 5, benchmarkRounds = 100, warmupRounds = 2)
     public void findByOrganizationNameTest() throws TimeoutException, InterruptedException {
         final Waiter waiter = new Waiter();
         String organizationName = "TestO" + r.nextInt(5000);
         Flux<Employee> employees = client.get().uri("/employees/organization/{organizationName}", organizationName).retrieve().bodyToFlux(Employee.class);
         employees.count().subscribe(count -> {
-            LOGGER.info("Found: {}", count);
             waiter.assertTrue(count > 0);
             waiter.resume();
+            LOGGER.info("Found: {}", count);
         });
         waiter.await(5000);
     }
