@@ -26,7 +26,7 @@ public class SampleApplication {
 
     @Bean(name = "ConcurrentTaskExecutor")
     public TaskExecutor taskExecutor () {
-        return new ConcurrentTaskExecutor(Executors.newFixedThreadPool(10));
+        return new ConcurrentTaskExecutor(Executors.newFixedThreadPool(3));
     }
 
 }

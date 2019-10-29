@@ -10,7 +10,6 @@ import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import pl.piomin.services.elasticsearch.model.Department;
 import pl.piomin.services.elasticsearch.model.Employee;
 import pl.piomin.services.elasticsearch.model.Organization;
-import pl.piomin.services.elasticsearch.repository.EmployeeRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -24,8 +23,6 @@ public class SampleDataSet {
     private static final String INDEX_TYPE = "employee";
     private static int COUNTER = 0;
 
-    @Autowired
-    EmployeeRepository repository;
     @Autowired
     ElasticsearchTemplate template;
     @Autowired
@@ -49,7 +46,6 @@ public class SampleDataSet {
             List<Employee> employees = employees();
             for (Employee employee : employees) {
                 IndexQuery indexQuery = new IndexQuery();
-//                indexQuery.setId(employee.getId().toString());
                 indexQuery.setSource(mapper.writeValueAsString(employee));
                 indexQuery.setIndexName(INDEX_NAME);
                 indexQuery.setType(INDEX_TYPE);
@@ -67,12 +63,9 @@ public class SampleDataSet {
 
     private List<Employee> employees() {
         List<Employee> employees = new ArrayList<>();
-//        int id = (int) repository.count();
-//        LOGGER.info("Starting from id: {}", id);
         for (int i = 0; i < 10000; i++) {
             Random r = new Random();
             Employee employee = new Employee();
-//            employee.setId((long) i);
             employee.setName("JohnSmith" + r.nextInt(1000000));
             employee.setAge(r.nextInt(100));
             employee.setPosition("Developer");
