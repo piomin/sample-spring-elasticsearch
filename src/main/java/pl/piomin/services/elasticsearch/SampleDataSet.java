@@ -71,7 +71,7 @@ public class SampleDataSet {
             employee.setPosition("Developer");
             int departmentId = r.nextInt(500000);
             employee.setDepartment(new Department((long) departmentId, "TestD" + departmentId));
-            int organizationId = departmentId % 100;
+            int organizationId = departmentId / 100;
             employee.setOrganization(new Organization((long) organizationId, "TestO" + organizationId, "Test Street No. " + organizationId));
             employees.add(employee);
         }
