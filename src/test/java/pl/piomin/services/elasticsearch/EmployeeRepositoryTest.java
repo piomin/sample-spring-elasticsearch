@@ -32,7 +32,7 @@ public class EmployeeRepositoryTest {
     @Test
     public void testAdd() {
         Employee employee = new Employee();
-        employee.setId(1L);
+//        employee.setId(1L);
         employee.setName("John Smith");
         employee.setAge(33);
         employee.setPosition("Developer");
@@ -40,6 +40,7 @@ public class EmployeeRepositoryTest {
         employee.setOrganization(new Organization(1L, "TestO", "Test Street No. 1"));
         employee = repository.save(employee);
         Assert.assertNotNull(employee);
+        Assert.assertNotNull(employee.getId());
     }
 
     @Test

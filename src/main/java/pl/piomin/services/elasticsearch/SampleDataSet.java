@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import pl.piomin.services.elasticsearch.model.Department;
@@ -21,30 +22,34 @@ public class SampleDataSet {
     private static final Logger LOGGER = LoggerFactory.getLogger(SampleDataSet.class);
     private static final String INDEX_NAME = "sample";
     private static final String INDEX_TYPE = "employee";
+    private static int COUNTER = 0;
 
     @Autowired
     EmployeeRepository repository;
     @Autowired
     ElasticsearchTemplate template;
+    @Autowired
+    TaskExecutor taskExecutor;
 
     @PostConstruct
     public void init() {
+        if (!template.indexExists(INDEX_NAME)) {
+            template.createIndex(INDEX_NAME);
+            LOGGER.info("New index created: {}", INDEX_NAME);
+        }
         for (int i = 0; i < 10000; i++) {
-            bulk(i);
+            taskExecutor.execute(() -> bulk());
         }
     }
 
-    public void bulk(int ii) {
+    public void bulk() {
         try {
-            if (!template.indexExists(INDEX_NAME)) {
-                template.createIndex(INDEX_NAME);
-            }
             ObjectMapper mapper = new ObjectMapper();
             List<IndexQuery> queries = new ArrayList<>();
             List<Employee> employees = employees();
             for (Employee employee : employees) {
                 IndexQuery indexQuery = new IndexQuery();
-                indexQuery.setId(employee.getId().toString());
+//                indexQuery.setId(employee.getId().toString());
                 indexQuery.setSource(mapper.writeValueAsString(employee));
                 indexQuery.setIndexName(INDEX_NAME);
                 indexQuery.setType(INDEX_TYPE);
@@ -54,7 +59,7 @@ public class SampleDataSet {
                 template.bulkIndex(queries);
             }
             template.refresh(INDEX_NAME);
-            LOGGER.info("BulkIndex completed: {}", ii);
+            LOGGER.info("BulkIndex completed: {}", ++COUNTER);
         } catch (Exception e) {
             LOGGER.error("Error bulk index", e);
         }
@@ -62,16 +67,16 @@ public class SampleDataSet {
 
     private List<Employee> employees() {
         List<Employee> employees = new ArrayList<>();
-        int id = (int) repository.count();
-        LOGGER.info("Starting from id: {}", id);
-        for (int i = id; i < 10000 + id; i++) {
+//        int id = (int) repository.count();
+//        LOGGER.info("Starting from id: {}", id);
+        for (int i = 0; i < 10000; i++) {
             Random r = new Random();
             Employee employee = new Employee();
-            employee.setId((long) i);
-            employee.setName("John Smith" + r.nextInt(1000000));
+//            employee.setId((long) i);
+            employee.setName("JohnSmith" + r.nextInt(1000000));
             employee.setAge(r.nextInt(100));
             employee.setPosition("Developer");
-            int departmentId = r.nextInt(5000);
+            int departmentId = r.nextInt(500000);
             employee.setDepartment(new Department((long) departmentId, "TestD" + departmentId));
             int organizationId = departmentId % 100;
             employee.setOrganization(new Organization((long) organizationId, "TestO" + organizationId, "Test Street No. " + organizationId));
