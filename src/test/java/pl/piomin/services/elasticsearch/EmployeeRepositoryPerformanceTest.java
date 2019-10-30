@@ -33,7 +33,7 @@ public class EmployeeRepositoryPerformanceTest {
             .build();
 
     @Test
-    @BenchmarkOptions(concurrency = 5, benchmarkRounds = 100, warmupRounds = 2)
+    @BenchmarkOptions(concurrency = 30, benchmarkRounds = 500, warmupRounds = 2)
     public void addTest() throws TimeoutException, InterruptedException {
         final Waiter waiter = new Waiter();
         Employee employee = new Employee();
@@ -52,7 +52,7 @@ public class EmployeeRepositoryPerformanceTest {
     }
 
     @Test
-    @BenchmarkOptions(concurrency = 5, benchmarkRounds = 100, warmupRounds = 2)
+    @BenchmarkOptions(concurrency = 30, benchmarkRounds = 500, warmupRounds = 2)
     public void findByNameTest() throws TimeoutException, InterruptedException {
         final Waiter waiter = new Waiter();
         String name = "JohnSmith" + r.nextInt(1000000);
@@ -66,7 +66,7 @@ public class EmployeeRepositoryPerformanceTest {
     }
 
     @Test
-    @BenchmarkOptions(concurrency = 5, benchmarkRounds = 100, warmupRounds = 2)
+    @BenchmarkOptions(concurrency = 30, benchmarkRounds = 500, warmupRounds = 2)
     public void findByOrganizationNameTest() throws TimeoutException, InterruptedException {
         final Waiter waiter = new Waiter();
         String organizationName = "TestO" + r.nextInt(5000);
