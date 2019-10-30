@@ -27,7 +27,7 @@ public class EmployeeRepositoryPerformanceTest extends AbstractBenchmark {
     private Random r = new Random();
 
     @Test
-    @BenchmarkOptions(concurrency = 5, benchmarkRounds = 100, warmupRounds = 2)
+    @BenchmarkOptions(concurrency = 30, benchmarkRounds = 500, warmupRounds = 2)
     public void addTest() {
         Employee employee = new Employee();
         employee.setName("John Smith");
@@ -41,7 +41,7 @@ public class EmployeeRepositoryPerformanceTest extends AbstractBenchmark {
     }
 
     @Test
-    @BenchmarkOptions(concurrency = 5, benchmarkRounds = 100, warmupRounds = 2)
+    @BenchmarkOptions(concurrency = 30, benchmarkRounds = 500, warmupRounds = 2)
     public void findByNameTest() {
         String name = "JohnSmith" + r.nextInt(1000000);
         Employee[] employees = template.getForObject("http://localhost:8080/employees/{name}", Employee[].class, name);
@@ -50,7 +50,7 @@ public class EmployeeRepositoryPerformanceTest extends AbstractBenchmark {
     }
 
     @Test
-    @BenchmarkOptions(concurrency = 5, benchmarkRounds = 100, warmupRounds = 2)
+    @BenchmarkOptions(concurrency = 30, benchmarkRounds = 500, warmupRounds = 2)
     public void findByOrganizationNameTest() {
         String organizationName = "TestO" + r.nextInt(5000);
         Employee[] employees = template.getForObject("http://localhost:8080/employees/organization/{organizationName}", Employee[].class, organizationName);
