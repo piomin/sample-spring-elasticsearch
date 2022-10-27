@@ -40,13 +40,16 @@ public class SampleDataSet {
 
     public void bulk(int ii) {
         try {
-            Mono<Boolean> exists = client.indices().existsIndex(request -> request.indices(INDEX_NAME));
-            exists.subscribe(ex -> {
-                if (!ex) {
-                    LOGGER.info("Creating index: {}", INDEX_NAME);
-                    client.indices().createIndex(request -> request.index(INDEX_NAME));
-                }
-            });
+            client.indices().existsIndex(request -> request.indices(INDEX_NAME))
+                    .flatMap(
+                            ex -> {
+                                if (!ex) {
+                                    LOGGER.info("Creating index: {}", INDEX_NAME);
+                                    return client.indices().createIndex(request -> request.index(INDEX_NAME));
+                                } else {
+                                    return Mono.empty();
+                                }
+                            }).subscribe();
             List<Employee> employees = employees();
             Flux<Employee> s = repository.saveAll(employees);
             s.subscribe(empl -> LOGGER.info("ADD: {}", empl), e -> LOGGER.info("Error: {}", e.getMessage()));
@@ -58,8 +61,10 @@ public class SampleDataSet {
 
     private List<Employee> employees() {
         List<Employee> employees = new ArrayList<>();
-        int id = repository.count().block().intValue();
-        LOGGER.info("Starting from id: {}", id);
+        repository.count().doOnNext(cnt ->
+                LOGGER.info("Starting from id: {}", cnt.intValue())
+        ).subscribe();
+
         for (int i = 0; i < 100; i++) {
             Random r = new Random();
             Employee employee = new Employee();
