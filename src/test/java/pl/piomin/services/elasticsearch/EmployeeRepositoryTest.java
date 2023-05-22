@@ -33,11 +33,11 @@ public class EmployeeRepositoryTest {
     @Container
 //    @ServiceConnection
 //    public static ElasticsearchContainer container = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:8.7.0");
-    public static ElasticsearchContainer container = new ElasticsearchContainer();
+    public static ElasticsearchContainer container = new ElasticsearchContainer().withExposedPorts(9200);
 
     @DynamicPropertySource
     static void registerElasticsearchProperties(DynamicPropertyRegistry registry) {
-        String uri = container.getContainerIpAddress() + ":" + container.getMappedPort(9300);
+        String uri = container.getContainerIpAddress() + ":" + container.getMappedPort(9200);
         registry.add("spring.data.elasticsearch.cluster-nodes", () -> uri);
     }
 
