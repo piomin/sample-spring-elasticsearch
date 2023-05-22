@@ -33,7 +33,7 @@ public class EmployeeRepositoryTest {
 
     @DynamicPropertySource
     static void registerElasticsearchProperties(DynamicPropertyRegistry registry) {
-        String uri = "http://" + container.getContainerIpAddress() + ":" + container.getMappedPort(9300);
+        String uri = container.getContainerIpAddress() + ":" + container.getMappedPort(9300);
         registry.add("spring.elasticsearch.uris", () -> uri);
         registry.add("spring.elasticsearch.rest.uris", () -> uri);
     }
