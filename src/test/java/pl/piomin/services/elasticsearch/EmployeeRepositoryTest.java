@@ -1,11 +1,12 @@
 package pl.piomin.services.elasticsearch;
 
-import org.junit.*;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.testcontainers.elasticsearch.ElasticsearchContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -16,24 +17,29 @@ import pl.piomin.services.elasticsearch.repository.EmployeeRepository;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @SpringBootTest
 @Testcontainers
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class EmployeeRepositoryTest {
 
     @Autowired
     EmployeeRepository repository;
 
     @Container
-    public static ElasticsearchContainer container = new ElasticsearchContainer();
+    @ServiceConnection
+    public static ElasticsearchContainer container = new ElasticsearchContainer("elasticsearch:8.7.0");
 
-    @DynamicPropertySource
-    static void registerElasticsearchProperties(DynamicPropertyRegistry registry) {
-        String uri = container.getContainerIpAddress() + ":" + container.getMappedPort(9300);
-        registry.add("spring.data.elasticsearch.cluster-nodes", () -> uri);
-    }
+//    @DynamicPropertySource
+//    static void registerElasticsearchProperties(DynamicPropertyRegistry registry) {
+//        String uri = container.getContainerIpAddress() + ":" + container.getMappedPort(9300);
+//        registry.add("spring.data.elasticsearch.cluster-nodes", () -> uri);
+//    }
 
     @Test
+    @Order(1)
     public void testAdd() {
         Employee employee = new Employee();
 //        employee.setId(1L);
@@ -43,26 +49,29 @@ public class EmployeeRepositoryTest {
         employee.setDepartment(new Department(1L, "TestD"));
         employee.setOrganization(new Organization(1L, "TestO", "Test Street No. 1"));
         employee = repository.save(employee);
-        Assert.assertNotNull(employee);
-        Assert.assertNotNull(employee.getId());
+        assertNotNull(employee);
+        assertNotNull(employee.getId());
     }
 
     @Test
+    @Order(2)
     public void testFindAll() {
         Iterable<Employee> employees = repository.findAll();
-        Assert.assertTrue(employees.iterator().hasNext());
+        assertTrue(employees.iterator().hasNext());
     }
 
     @Test
+    @Order(2)
     public void testFindByOrganization() {
         List<Employee> employees = repository.findByOrganizationName("TestO");
-        Assert.assertTrue(employees.size() > 0);
+        assertTrue(employees.size() > 0);
     }
 
     @Test
+    @Order(2)
     public void testFindByName() {
         List<Employee> employees = repository.findByName("John Smith");
-        Assert.assertTrue(employees.size() > 0);
+        assertTrue(employees.size() > 0);
     }
 
 }
