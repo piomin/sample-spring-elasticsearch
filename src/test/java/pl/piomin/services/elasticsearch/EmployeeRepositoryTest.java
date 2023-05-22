@@ -30,7 +30,7 @@ public class EmployeeRepositoryTest {
 
     @Container
     @ServiceConnection
-    public static ElasticsearchContainer container = new ElasticsearchContainer("elasticsearch:8.7.0");
+    public static ElasticsearchContainer container = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch-oss:8.7.0");
 
 //    @DynamicPropertySource
 //    static void registerElasticsearchProperties(DynamicPropertyRegistry registry) {
