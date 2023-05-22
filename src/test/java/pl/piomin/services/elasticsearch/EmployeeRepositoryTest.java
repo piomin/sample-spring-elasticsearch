@@ -1,12 +1,14 @@
 package pl.piomin.services.elasticsearch;
 
 import org.junit.*;
-import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.elasticsearch.ElasticsearchContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import pl.piomin.services.elasticsearch.model.Department;
 import pl.piomin.services.elasticsearch.model.Employee;
 import pl.piomin.services.elasticsearch.model.Organization;
@@ -14,19 +16,21 @@ import pl.piomin.services.elasticsearch.repository.EmployeeRepository;
 
 import java.util.List;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
+@Testcontainers
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class EmployeeRepositoryTest {
 
-    @ClassRule
-    public static ElasticsearchContainer container = new ElasticsearchContainer();
     @Autowired
     EmployeeRepository repository;
 
-    @BeforeClass
-    public static void before() {
-        System.setProperty("spring.data.elasticsearch.cluster-nodes", container.getContainerIpAddress() + ":" + container.getMappedPort(9300));
+    @Container
+    public static ElasticsearchContainer container = new ElasticsearchContainer();
+
+    @DynamicPropertySource
+    static void registerElasticsearchProperties(DynamicPropertyRegistry registry) {
+        String uri = container.getContainerIpAddress() + ":" + container.getMappedPort(9300);
+        registry.add("spring.data.elasticsearch.cluster-nodes", () -> uri);
     }
 
     @Test
