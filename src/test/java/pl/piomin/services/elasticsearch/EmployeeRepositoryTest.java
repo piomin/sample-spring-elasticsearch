@@ -7,6 +7,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.elasticsearch.ElasticsearchContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -29,14 +31,15 @@ public class EmployeeRepositoryTest {
     EmployeeRepository repository;
 
     @Container
-    @ServiceConnection
-    public static ElasticsearchContainer container = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:8.7.0");
+//    @ServiceConnection
+//    public static ElasticsearchContainer container = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:8.7.0");
+    public static ElasticsearchContainer container = new ElasticsearchContainer();
 
-//    @DynamicPropertySource
-//    static void registerElasticsearchProperties(DynamicPropertyRegistry registry) {
-//        String uri = container.getContainerIpAddress() + ":" + container.getMappedPort(9300);
-//        registry.add("spring.data.elasticsearch.cluster-nodes", () -> uri);
-//    }
+    @DynamicPropertySource
+    static void registerElasticsearchProperties(DynamicPropertyRegistry registry) {
+        String uri = container.getContainerIpAddress() + ":" + container.getMappedPort(9300);
+        registry.add("spring.data.elasticsearch.cluster-nodes", () -> uri);
+    }
 
     @Test
     @Order(1)
