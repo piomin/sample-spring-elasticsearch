@@ -11,7 +11,7 @@ public class ElasticsearchContainerDevMode {
     @Bean
     @ServiceConnection
     ElasticsearchContainer elasticsearchContainer() {
-        return new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch-oss:8.7.0");
+        return new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:8.7.0");
     }
 
 }
