@@ -8,7 +8,7 @@ spring:
 
   elasticsearch:
     rest:
-      uris: http://192.168.99.100:9200
+      uris: http://localhost:9200
 
 initial-import:
   enabled: false
