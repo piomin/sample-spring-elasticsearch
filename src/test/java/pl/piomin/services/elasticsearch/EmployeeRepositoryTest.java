@@ -29,19 +29,17 @@ public class EmployeeRepositoryTest {
     EmployeeRepository repository;
 
     @Container
-    public static ElasticsearchContainer container = new ElasticsearchContainer();
+    public static ElasticsearchContainer container = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:7.9.2");
 
     @DynamicPropertySource
     static void registerElasticsearchProperties(DynamicPropertyRegistry registry) {
-        String uri = container.getContainerIpAddress() + ":" + container.getMappedPort(9300);
-        registry.add("spring.elasticsearch.uris", () -> uri);
-        registry.add("spring.elasticsearch.rest.uris", () -> uri);
+//        String uri = container.getContainerIpAddress() + ":" + container.getMappedPort(9200);
+        registry.add("spring.elasticsearch.rest.uris", () -> container.getHttpHostAddress());
     }
 
     @Test
     public void testAdd() {
         Employee employee = new Employee();
-//        employee.setId(1L);
         employee.setName("John Smith");
         employee.setAge(33);
         employee.setPosition("Developer");

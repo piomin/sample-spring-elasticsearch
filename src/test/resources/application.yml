@@ -1,10 +1,10 @@
 spring:
   application:
     name: sample-spring-elasticsearch
-  data:
-    elasticsearch:
-      cluster-name: docker-cluster
-      cluster-nodes: 192.168.99.100:9300
+#  data:
+#    elasticsearch:
+#      cluster-name: docker-cluster
+#      cluster-nodes: localhost:9300
 
   elasticsearch:
     rest:
