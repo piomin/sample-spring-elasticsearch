@@ -7,6 +7,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.elasticsearch.ElasticsearchContainer;
@@ -30,17 +31,21 @@ public class EmployeeRepositoryTest {
     @Autowired
     EmployeeRepository repository;
 
-    @Container
-//    @ServiceConnection
-//    public static ElasticsearchContainer container = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:8.7.0");
-    public static ElasticsearchContainer container = new ElasticsearchContainer().withExposedPorts(9200);
-
-    @DynamicPropertySource
-    static void registerElasticsearchProperties(DynamicPropertyRegistry registry) {
-//        String uri = container.getContainerIpAddress() + ":" + container.getMappedPort(9200);
-        System.out.println("!!!!!!!   " + container.getHttpHostAddress());
-        registry.add("spring.data.elasticsearch.cluster-nodes", container::getHttpHostAddress);
+    @Bean
+    @ServiceConnection
+    static ElasticsearchContainer elasticsearchContainer() {
+        return new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:8.7.0")
+                .withExposedPorts(9200);
     }
+
+//    public static ElasticsearchContainer container = new ElasticsearchContainer().withExposedPorts(9200);
+
+//    @DynamicPropertySource
+//    static void registerElasticsearchProperties(DynamicPropertyRegistry registry) {
+//        String uri = container.getContainerIpAddress() + ":" + container.getMappedPort(9200);
+//        System.out.println("!!!!!!!   " + container.getHttpHostAddress());
+//        registry.add("spring.data.elasticsearch.cluster-nodes", container::getHttpHostAddress);
+//    }
 
     @Test
     @Order(1)
