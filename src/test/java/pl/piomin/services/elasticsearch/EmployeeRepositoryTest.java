@@ -34,7 +34,7 @@ public class EmployeeRepositoryTest {
     @Bean
     @ServiceConnection
     static ElasticsearchContainer elasticsearchContainer() {
-        return new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:8.7.0")
+        return new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch-oss:8.7.0")
                 .withExposedPorts(9200);
     }
 
