@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.elasticsearch.ElasticsearchContainer;
@@ -36,44 +34,43 @@ public class EmployeeRepositoryTest {
 
     @DynamicPropertySource
     static void registerElasticsearchProperties(DynamicPropertyRegistry registry) {
-        String uri = container.getContainerIpAddress() + ":" + container.getMappedPort(9300);
-        registry.add("spring.data.elasticsearch.cluster-nodes", () -> uri);
+//        String uri = container.getContainerIpAddress() + ":" + container.getMappedPort(9200);
+        registry.add("spring.elasticsearch.rest.uris", () -> container.getHttpHostAddress());
     }
 
     @Test
     @Order(1)
     public void testAdd() {
         Employee employee = new Employee();
-//        employee.setId(1L);
         employee.setName("John Smith");
         employee.setAge(33);
         employee.setPosition("Developer");
         employee.setDepartment(new Department(1L, "TestD"));
         employee.setOrganization(new Organization(1L, "TestO", "Test Street No. 1"));
         employee = repository.save(employee);
-        Assert.assertNotNull(employee);
-        Assert.assertNotNull(employee.getId());
+        assertNotNull(employee);
+        assertNotNull(employee.getId());
     }
 
     @Test
     @Order(2)
     public void testFindAll() {
         Iterable<Employee> employees = repository.findAll();
-        Assert.assertTrue(employees.iterator().hasNext());
+        assertTrue(employees.iterator().hasNext());
     }
 
     @Test
     @Order(2)
     public void testFindByOrganization() {
         List<Employee> employees = repository.findByOrganizationName("TestO");
-        Assert.assertTrue(employees.size() > 0);
+        assertTrue(employees.size() > 0);
     }
 
     @Test
     @Order(2)
     public void testFindByName() {
         List<Employee> employees = repository.findByName("John Smith");
-        Assert.assertTrue(employees.size() > 0);
+        assertTrue(employees.size() > 0);
     }
 
 }
