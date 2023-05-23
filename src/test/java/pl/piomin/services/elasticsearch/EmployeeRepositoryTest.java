@@ -31,21 +31,14 @@ public class EmployeeRepositoryTest {
     @Autowired
     EmployeeRepository repository;
 
-    @Bean
-    @ServiceConnection
-    static ElasticsearchContainer elasticsearchContainer() {
-        return new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch-oss:8.7.0")
-                .withExposedPorts(9200);
+    @Container
+    public static ElasticsearchContainer container = new ElasticsearchContainer();
+
+    @DynamicPropertySource
+    static void registerElasticsearchProperties(DynamicPropertyRegistry registry) {
+        String uri = container.getContainerIpAddress() + ":" + container.getMappedPort(9300);
+        registry.add("spring.data.elasticsearch.cluster-nodes", () -> uri);
     }
-
-//    public static ElasticsearchContainer container = new ElasticsearchContainer().withExposedPorts(9200);
-
-//    @DynamicPropertySource
-//    static void registerElasticsearchProperties(DynamicPropertyRegistry registry) {
-//        String uri = container.getContainerIpAddress() + ":" + container.getMappedPort(9200);
-//        System.out.println("!!!!!!!   " + container.getHttpHostAddress());
-//        registry.add("spring.data.elasticsearch.cluster-nodes", container::getHttpHostAddress);
-//    }
 
     @Test
     @Order(1)
@@ -58,29 +51,29 @@ public class EmployeeRepositoryTest {
         employee.setDepartment(new Department(1L, "TestD"));
         employee.setOrganization(new Organization(1L, "TestO", "Test Street No. 1"));
         employee = repository.save(employee);
-        assertNotNull(employee);
-        assertNotNull(employee.getId());
+        Assert.assertNotNull(employee);
+        Assert.assertNotNull(employee.getId());
     }
 
     @Test
     @Order(2)
     public void testFindAll() {
         Iterable<Employee> employees = repository.findAll();
-        assertTrue(employees.iterator().hasNext());
+        Assert.assertTrue(employees.iterator().hasNext());
     }
 
     @Test
     @Order(2)
     public void testFindByOrganization() {
         List<Employee> employees = repository.findByOrganizationName("TestO");
-        assertTrue(employees.size() > 0);
+        Assert.assertTrue(employees.size() > 0);
     }
 
     @Test
     @Order(2)
     public void testFindByName() {
         List<Employee> employees = repository.findByName("John Smith");
-        assertTrue(employees.size() > 0);
+        Assert.assertTrue(employees.size() > 0);
     }
 
 }
