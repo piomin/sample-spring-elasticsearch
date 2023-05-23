@@ -30,12 +30,13 @@ public class EmployeeRepositoryTest {
     EmployeeRepository repository;
 
     @Container
-    public static ElasticsearchContainer container = new ElasticsearchContainer();
+    public static ElasticsearchContainer container = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:7.9.2");
 
     @DynamicPropertySource
     static void registerElasticsearchProperties(DynamicPropertyRegistry registry) {
 //        String uri = container.getContainerIpAddress() + ":" + container.getMappedPort(9200);
         registry.add("spring.elasticsearch.rest.uris", () -> container.getHttpHostAddress());
+        registry.add("spring.elasticsearch.uris", () -> container.getHttpHostAddress());
     }
 
     @Test

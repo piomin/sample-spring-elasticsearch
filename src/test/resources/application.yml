@@ -7,6 +7,7 @@ spring:
 #      cluster-nodes: localhost:9300
 
   elasticsearch:
+    uris: http://localhost:9200
     rest:
       uris: http://localhost:9200
 
