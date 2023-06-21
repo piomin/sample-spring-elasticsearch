@@ -12,7 +12,7 @@ import pl.piomin.services.elasticsearch.model.Department;
 import pl.piomin.services.elasticsearch.model.Employee;
 import pl.piomin.services.elasticsearch.model.Organization;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
