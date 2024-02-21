@@ -4,10 +4,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.elasticsearch.repository.config.EnableReactiveElasticsearchRepositories;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
+import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
+
+import java.util.concurrent.Executors;
 
 @SpringBootApplication
-@EnableReactiveElasticsearchRepositories
+@EnableElasticsearchRepositories
 public class SampleApplication {
 
     public static void main(String[] args) {
@@ -18,6 +22,11 @@ public class SampleApplication {
     @ConditionalOnProperty("initial-import.enabled")
     public SampleDataSet dataSet() {
         return new SampleDataSet();
+    }
+
+    @Bean(name = "ConcurrentTaskExecutor")
+    public TaskExecutor taskExecutor () {
+        return new ConcurrentTaskExecutor(Executors.newFixedThreadPool(3));
     }
 
 }
