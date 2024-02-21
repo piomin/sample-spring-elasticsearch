@@ -18,6 +18,7 @@
 
     <modules>
         <module>employee-service</module>
+        <module>employee-reactive-service</module>
     </modules>
 
     <properties>
