@@ -1,15 +1,14 @@
 package pl.piomin.services.elasticsearch.repository;
 
-import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
 import pl.piomin.services.elasticsearch.model.Employee;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
 
 @Repository
-public interface EmployeeRepository extends ElasticsearchRepository<Employee, Long> {
+public interface EmployeeRepository extends ReactiveCrudRepository<Employee, Long> {
 
-    List<Employee> findByOrganizationName(String name);
-    List<Employee> findByName(String name);
+    Flux<Employee> findByOrganizationName(String name);
+    Flux<Employee> findByName(String name);
 
 }

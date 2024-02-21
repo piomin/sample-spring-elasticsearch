@@ -7,4 +7,5 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=piomin_sample-spring-elasticsearch&metric=coverage)](https://sonarcloud.io/dashboard?id=piomin_sample-spring-elasticsearch)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=piomin_sample-spring-elasticsearch&metric=ncloc)](https://sonarcloud.io/dashboard?id=piomin_sample-spring-elasticsearch)
 
-Detailed description can be found here: [Elasticsearch with Spring Boot](https://piotrminkowski.com/2019/03/29/elasticsearch-with-spring-boot/) 
+1. Detailed description for a standard option can be found here: [Elasticsearch with Spring Boot](https://piotrminkowski.com/2019/03/29/elasticsearch-with-spring-boot/)
+2. Detailed description for a reactive option can be found here: [Reactive Elasticsearch with Spring Boot](https://piotrminkowski.wordpress.com/2019/10/25/reactive-elasticsearch-with-spring-boot/) 
