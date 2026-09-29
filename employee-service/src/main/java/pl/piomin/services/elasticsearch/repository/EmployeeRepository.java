@@ -7,7 +7,7 @@ import pl.piomin.services.elasticsearch.model.Employee;
 import java.util.List;
 
 @Repository
-public interface EmployeeRepository extends ElasticsearchRepository<Employee, Long> {
+public interface EmployeeRepository extends ElasticsearchRepository<Employee, String> {
 
     List<Employee> findByOrganizationName(String name);
     List<Employee> findByName(String name);
