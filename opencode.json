@@ -1,5 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "permission": "allow",
   "provider": {
     "vllm": {
       "npm": "@ai-sdk/openai-compatible",
