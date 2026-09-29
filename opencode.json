@@ -1,0 +1,17 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "vllm": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Qwen3 Coder Next",
+      "options": {
+        "baseURL": "http://qwen3-coder-ai.apps.piomin-aws-main.5fuc.p1.openshiftapps.com/v1"
+      },
+      "models": {
+        "qwen3_coder": {
+          "name": "Qwen3 Coder Next"
+        }
+      }
+    }
+  }
+}
