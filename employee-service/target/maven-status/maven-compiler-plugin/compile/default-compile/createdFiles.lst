@@ -1,7 +1,0 @@
-pl/piomin/services/elasticsearch/model/Employee.class
-pl/piomin/services/elasticsearch/model/Department.class
-pl/piomin/services/elasticsearch/SampleApplication.class
-pl/piomin/services/elasticsearch/model/Organization.class
-pl/piomin/services/elasticsearch/controller/EmployeeController.class
-pl/piomin/services/elasticsearch/repository/EmployeeRepository.class
-pl/piomin/services/elasticsearch/SampleDataSet.class
