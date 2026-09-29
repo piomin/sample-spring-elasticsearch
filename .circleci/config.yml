@@ -19,8 +19,18 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Install JDK 21
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y openjdk-21-jdk
+            sudo update-alternatives --set java /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+            sudo update-alternatives --set javac /usr/lib/jvm/java-21-openjdk-amd64/bin/javac
+      - run:
           name: Maven Tests
-          command: mvn test
+          command: |
+            export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+            export PATH=$JAVA_HOME/bin:$PATH
+            mvn test
 
 orbs:
   maven: circleci/maven@2.1.1

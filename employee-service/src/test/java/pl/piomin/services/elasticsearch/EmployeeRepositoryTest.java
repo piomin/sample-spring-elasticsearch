@@ -1,6 +1,7 @@
 package pl.piomin.services.elasticsearch;
 
 import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +30,17 @@ public class EmployeeRepositoryTest {
     EmployeeRepository repository;
 
     @Container
-    public static ElasticsearchContainer container = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:7.9.2");
+    public static ElasticsearchContainer container =
+            new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:8.17.0")
+                    .withEnv("xpack.security.enabled", "false");
 
     @DynamicPropertySource
     static void registerElasticsearchProperties(DynamicPropertyRegistry registry) {
-//        String uri = container.getContainerIpAddress() + ":" + container.getMappedPort(9200);
-        registry.add("spring.elasticsearch.rest.uris", () -> container.getHttpHostAddress());
+        registry.add("spring.elasticsearch.uris", container::getHttpHostAddress);
     }
 
     @Test
+    @Order(1)
     public void testAdd() {
         Employee employee = new Employee();
         employee.setName("John Smith");
@@ -51,18 +54,21 @@ public class EmployeeRepositoryTest {
     }
 
     @Test
+    @Order(2)
     public void testFindAll() {
         Iterable<Employee> employees = repository.findAll();
         assertTrue(employees.iterator().hasNext());
     }
 
     @Test
+    @Order(3)
     public void testFindByOrganization() {
         List<Employee> employees = repository.findByOrganizationName("TestO");
         assertTrue(employees.size() > 0);
     }
 
     @Test
+    @Order(4)
     public void testFindByName() {
         List<Employee> employees = repository.findByName("John Smith");
         assertTrue(employees.size() > 0);
