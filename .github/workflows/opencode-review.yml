@@ -29,6 +29,7 @@ jobs:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/gcp-credentials.json
         with:
           model: google-vertex-anthropic/claude-sonnet-4-6@default
+          use_github_token: false
           prompt: |
             Review this pull request:
             - Check for code quality issues
