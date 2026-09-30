@@ -32,7 +32,7 @@ jobs:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/gcp-credentials.json
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          model: anthropic/claude-sonnet-4-20250514
+          model: google-vertex-anthropic/claude-opus-4-6@default
           use_github_token: true
           prompt: |
             Review this pull request:
