@@ -5,7 +5,6 @@ import java.util.List;
 import pl.piomin.services.elasticsearch.model.Employee;
 import pl.piomin.services.elasticsearch.repository.EmployeeRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,8 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/employees")
 public class EmployeeController {
 
-	@Autowired
-	EmployeeRepository repository;
+	private final EmployeeRepository repository;
+
+	public EmployeeController(EmployeeRepository repository) {
+		this.repository = repository;
+	}
 
 	@PostMapping
 	public Employee add(@RequestBody Employee employee) {
