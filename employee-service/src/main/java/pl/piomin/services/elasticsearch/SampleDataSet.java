@@ -3,7 +3,6 @@ package pl.piomin.services.elasticsearch;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.IndexOperations;
@@ -24,12 +23,15 @@ public class SampleDataSet {
     private static final String INDEX_TYPE = "employee";
     private static int COUNTER = 0;
 
-    @Autowired
-    IndexOperations indexOperations;
-    @Autowired
-    ElasticsearchOperations template;
-    @Autowired
-    TaskExecutor taskExecutor;
+    private final IndexOperations indexOperations;
+    private final ElasticsearchOperations template;
+    private final TaskExecutor taskExecutor;
+
+    public SampleDataSet(IndexOperations indexOperations, ElasticsearchOperations template, TaskExecutor taskExecutor) {
+        this.indexOperations = indexOperations;
+        this.template = template;
+        this.taskExecutor = taskExecutor;
+    }
 
     @PostConstruct
     public void init() {
