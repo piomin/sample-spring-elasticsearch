@@ -1,7 +1,0 @@
-/home/runner/work/sample-spring-elasticsearch/sample-spring-elasticsearch/employee-reactive-service/src/main/java/pl/piomin/services/elasticsearch/SampleApplication.java
-/home/runner/work/sample-spring-elasticsearch/sample-spring-elasticsearch/employee-reactive-service/src/main/java/pl/piomin/services/elasticsearch/SampleDataSet.java
-/home/runner/work/sample-spring-elasticsearch/sample-spring-elasticsearch/employee-reactive-service/src/main/java/pl/piomin/services/elasticsearch/controller/EmployeeController.java
-/home/runner/work/sample-spring-elasticsearch/sample-spring-elasticsearch/employee-reactive-service/src/main/java/pl/piomin/services/elasticsearch/model/Department.java
-/home/runner/work/sample-spring-elasticsearch/sample-spring-elasticsearch/employee-reactive-service/src/main/java/pl/piomin/services/elasticsearch/model/Employee.java
-/home/runner/work/sample-spring-elasticsearch/sample-spring-elasticsearch/employee-reactive-service/src/main/java/pl/piomin/services/elasticsearch/model/Organization.java
-/home/runner/work/sample-spring-elasticsearch/sample-spring-elasticsearch/employee-reactive-service/src/main/java/pl/piomin/services/elasticsearch/repository/EmployeeRepository.java
