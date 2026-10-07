@@ -135,7 +135,7 @@ Both repositories use Spring Data's query derivation from method names — no cu
 
 ## Configuration
 
-By default, both services connect to Elasticsearch at `http://192.168.99.100:9200` (a Docker Machine default gateway). To override this, update `application.yml` in the respective module:
+By default, both services connect to Elasticsearch at `http://localhost:9200` (the Spring Boot default). To override this, update `application.yml` in the respective module:
 
 **`employee-service`**
 ```yaml
