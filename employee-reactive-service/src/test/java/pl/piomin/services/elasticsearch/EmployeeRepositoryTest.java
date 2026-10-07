@@ -36,7 +36,7 @@ public class EmployeeRepositoryTest {
 
     @Container
     public static ElasticsearchContainer container =
-            new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:8.17.0")
+            new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:9.1.0")
                     .withEnv("xpack.security.enabled", "false");
 
     @DynamicPropertySource
