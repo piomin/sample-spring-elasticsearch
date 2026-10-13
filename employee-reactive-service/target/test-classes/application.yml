@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: sample-spring-elasticsearch
+  elasticsearch:
+    uris: http://localhost:9200
+
+initial-import:
+  enabled: false

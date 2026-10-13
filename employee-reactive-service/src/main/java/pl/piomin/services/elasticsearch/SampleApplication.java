@@ -4,6 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+
+import pl.piomin.services.elasticsearch.repository.EmployeeRepository;
+
 @SpringBootApplication
 public class SampleApplication {
 
@@ -13,8 +16,8 @@ public class SampleApplication {
 
     @Bean
     @ConditionalOnProperty("initial-import.enabled")
-    public SampleDataSet dataSet() {
-        return new SampleDataSet();
+    public SampleDataSet dataSet(EmployeeRepository employeeRepository) {
+        return new SampleDataSet(employeeRepository);
     }
 
 }

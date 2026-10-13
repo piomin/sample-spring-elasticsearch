@@ -2,7 +2,6 @@ package pl.piomin.services.elasticsearch;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import pl.piomin.services.elasticsearch.model.Department;
 import pl.piomin.services.elasticsearch.model.Employee;
 import pl.piomin.services.elasticsearch.model.Organization;
@@ -17,8 +16,11 @@ public class SampleDataSet {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SampleDataSet.class);
 
-    @Autowired
-    EmployeeRepository repository;
+    private final EmployeeRepository repository;
+
+    public SampleDataSet(EmployeeRepository repository) {
+        this.repository = repository;
+    }
 
     @PostConstruct
     public void init() throws InterruptedException {
