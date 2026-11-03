@@ -29,7 +29,7 @@ The project is a **Maven multi-module** application containing two modules:
 
 ```
 sample-spring-elasticsearch/
-├── pom.xml                            # Parent POM (Spring Boot 2.7.18, Java 21)
+├── pom.xml                            # Parent POM (Spring Boot 3.4.3, Java 21)
 ├── employee-service/                  # Blocking / imperative REST service
 │   └── src/main/java/pl/piomin/services/elasticsearch/
 │       ├── SampleApplication.java
@@ -55,13 +55,13 @@ sample-spring-elasticsearch/
 ## Technologies
 
 - **Java 21**
-- **Spring Boot 2.7.18**
-- **Spring Data Elasticsearch** — blocking (`ElasticsearchRepository`) and reactive (`ReactiveCrudRepository`)
+- **Spring Boot 3.4.3**
+- **Spring Data Elasticsearch** — blocking (`ElasticsearchRepository`) and reactive (`ReactiveElasticsearchRepository`)
 - **Spring MVC** (`employee-service`) — servlet-based REST with embedded Tomcat
 - **Spring WebFlux** (`employee-reactive-service`) — reactive REST with embedded Netty and Project Reactor (`Flux`/`Mono`)
 - **Spring Boot Actuator** — health and metrics endpoints
 - **Testcontainers** — integration tests against a real Elasticsearch node (no external setup needed)
-- **JUnit 5** (`employee-service`) and **JUnit 4** (`employee-reactive-service`)
+- **JUnit 5** — both modules use JUnit Jupiter for integration tests
 
 ---
 
@@ -114,7 +114,7 @@ Employee (@Document indexName="employees")
 ### Blocking (`employee-service`)
 
 ```java
-public interface EmployeeRepository extends ElasticsearchRepository<Employee, Long> {
+public interface EmployeeRepository extends ElasticsearchRepository<Employee, String> {
     List<Employee> findByOrganizationName(String name);
     List<Employee> findByName(String name);
 }
@@ -123,7 +123,7 @@ public interface EmployeeRepository extends ElasticsearchRepository<Employee, Lo
 ### Reactive (`employee-reactive-service`)
 
 ```java
-public interface EmployeeRepository extends ReactiveCrudRepository<Employee, Long> {
+public interface EmployeeRepository extends ReactiveElasticsearchRepository<Employee, String> {
     Flux<Employee> findByOrganizationName(String name);
     Flux<Employee> findByName(String name);
 }
@@ -137,22 +137,11 @@ Both repositories use Spring Data's query derivation from method names — no cu
 
 By default, both services connect to Elasticsearch at `http://localhost:9200` (the Spring Boot default). To override this, update `application.yml` in the respective module:
 
-**`employee-service`**
+Both modules use the same property (Spring Boot 3.x unified configuration):
 ```yaml
 spring:
   elasticsearch:
-    rest:
-      uris: http://<your-es-host>:9200
-```
-
-**`employee-reactive-service`**
-```yaml
-spring:
-  data:
-    elasticsearch:
-      client:
-        reactive:
-          endpoints: <your-es-host>:9200
+    uris: http://<your-es-host>:9200
 ```
 
 To enable bulk data seeding on startup, set:
@@ -175,8 +164,6 @@ mvn test
 mvn test -pl employee-service
 mvn test -pl employee-reactive-service
 ```
-
-The `employee-reactive-service` module also includes `EmployeeRepositoryPerformanceTest`, a benchmark that runs 500 rounds across 30 concurrent threads against a locally running service on port `8080`.
 
 ---
 
