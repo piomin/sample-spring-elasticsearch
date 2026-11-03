@@ -11,7 +11,6 @@ import pl.piomin.services.elasticsearch.model.Employee;
 import pl.piomin.services.elasticsearch.model.Organization;
 import pl.piomin.services.elasticsearch.repository.EmployeeRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,8 +26,11 @@ public class EmployeeController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeController.class);
 
-	@Autowired
-	EmployeeRepository repository;
+	private final EmployeeRepository repository;
+
+	public EmployeeController(EmployeeRepository repository) {
+		this.repository = repository;
+	}
 
 	@PostMapping
 	public Mono<Employee> add(@RequestBody Employee employee) {
