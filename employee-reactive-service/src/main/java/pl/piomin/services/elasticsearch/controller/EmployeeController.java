@@ -27,8 +27,11 @@ public class EmployeeController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeController.class);
 
-	@Autowired
 	EmployeeRepository repository;
+
+	public EmployeeController(EmployeeRepository repository) {
+		this.repository = repository;
+	}
 
 	@PostMapping
 	public Mono<Employee> add(@RequestBody Employee employee) {
